@@ -2565,6 +2565,13 @@ impl Display for Tz {
     }
 }
 
+
+impl Tz {
+    pub fn transitions(&self) -> impl Iterator<Item = (i64, i32, bool)> {
+        self.timespans().rest.iter().map(|&(t, o)| (t, o.utc_offset + o.dst_offset,  o.dst_offset > 0))
+    }
+}
+
 impl TimeSpans for Tz {
     fn timespans(&self) -> FixedTimespanSet {
         const AFRICA__ABIDJAN: FixedTimespanSet = FixedTimespanSet {
